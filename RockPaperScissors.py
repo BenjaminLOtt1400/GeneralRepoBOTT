@@ -85,10 +85,13 @@ def main():
     Finally block asks the player if they wish to play again
     User input taken into variable repeater to either continue or exit while loop
     Program Ends when while loop is exited
-    """    
+    """
+    
     repeater = 'Cont'
+    
     print(STARTUP_STR)
-    while repeater != 'quit':
+    
+    while repeater.lower() != 'quit':
         try:
             user_play = input('Please enter your selection - rock, paper, scissors\n')
             computer_play = computer_seleciton()
