@@ -1,4 +1,25 @@
+import pip
+import os
 import random
+import tkinter as tk
+import time
+try:
+    from PIL import Image, ImageTk
+except ModuleNotFoundError:
+    print('Missing necessary import modules, pillow')
+    print('Program will force exit, please run again with the installed modules')
+    print('Pillow will be installed in 5 seconds')
+    time.sleep(5)
+    pip.main(['install', 'pillow'])
+try:
+    from playsound import playsound
+except ModuleNotFoundError:
+    print('Missing necessary import module, playsound')
+    print('Playsound will be installed in 5 seconds')
+    time.sleep(5)
+    pip.main(['install', 'playsound==1.2.2'])
+    os._exit(0)
+    
 
 STARTUP_STR = 'Welcome to Rock-Paper-Scissors!'
 
@@ -6,6 +27,24 @@ RESULT_STR = '''You chose {player}
 The computer chose: {computer}
 You {results}!
 '''
+def Sus():
+    """I know you are looking at this code
+    Please have fun with the easteregg
+    This was my way to add a fun little challenge
+    I finished the main rock paper scissors game before class ended monday
+    """    
+    print('Red is sus')
+    sus = tk.Tk()
+    sus.title('AMONGUS')
+    suspic = Image.open('DONOTOPEN.jpg')
+    red_is_sus = ImageTk.PhotoImage(suspic)
+    sus_label = tk.Label(sus, image=red_is_sus, border=False)
+    sus_label.pack()
+    sus.attributes("-topmost", True)
+    sus.mainloop()
+    playsound('sus_sound.mp3')
+    print('You have been voted off')
+    os._exit(0)
 
 class User_error(Exception):
     """Custom exception to handle invalid user entry
@@ -71,6 +110,9 @@ def Winner(user, computer):
         elif computer == 'Scissors':
             return 'Draw'
     
+    elif user.title() == 'Amongus':
+        Sus()
+    
     else:
         raise User_error('Invalid User Entry')
 
@@ -92,18 +134,23 @@ def main():
     print(STARTUP_STR)
     
     while repeater.lower() != 'quit':
+        
         try:
             user_play = input('Please enter your selection - rock, paper, scissors\n')
             computer_play = computer_seleciton()
             result = Winner(user_play, computer_play)
             print(RESULT_STR.format(player=user_play, computer=computer_play, results=result))
-        
+            if result == 'Win':
+                playsound('Winner.mp3')
+            elif result == 'Lose':
+                playsound('Lose.mp3')
+                   
         except ValueError as e:
             print(f'Error: {e}')
             
         except User_error as e:
             print(f'Error: {e}')
-
+        
         finally:
             repeater = input('Enter any key to play again, or type "quit"\n')
             
