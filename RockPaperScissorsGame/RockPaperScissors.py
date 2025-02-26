@@ -3,6 +3,8 @@ import os
 import random
 import tkinter as tk
 import time
+import requests
+from io import BytesIO
 try:
     from PIL import Image, ImageTk
 except ModuleNotFoundError:
@@ -19,7 +21,8 @@ except ModuleNotFoundError:
     time.sleep(5)
     pip.main(['install', 'playsound==1.2.2'])
     os._exit(0)
-    
+
+git_url = 'https://raw.githubusercontent.com/BenjaminLOtt1400/GeneralRepoBOTT/refs/heads/main/RockPaperScissorsGame/'    
 
 STARTUP_STR = 'Welcome to Rock-Paper-Scissors!'
 
@@ -36,13 +39,14 @@ def Sus():
     print('Red is sus')
     sus = tk.Tk()
     sus.title('AMONGUS')
-    suspic = Image.open('DONOTOPEN.jpg')
+    response = requests.get(git_url + 'DONOTOPEN.jpg')
+    suspic = Image.open(BytesIO(response.content))
     red_is_sus = ImageTk.PhotoImage(suspic)
     sus_label = tk.Label(sus, image=red_is_sus, border=False)
     sus_label.pack()
     sus.attributes("-topmost", True)
     sus.mainloop()
-    playsound('sus_sound.mp3')
+    playsound(git_url + 'sus_sound.mp3')
     print('You have been voted off')
     os._exit(0)
 
@@ -141,9 +145,9 @@ def main():
             result = Winner(user_play, computer_play)
             print(RESULT_STR.format(player=user_play, computer=computer_play, results=result))
             if result == 'Win':
-                playsound('Winner.mp3')
+                playsound(git_url + 'Winner.mp3')
             elif result == 'Lose':
-                playsound('Lose.mp3')
+                playsound(git_url +'Lose.mp3')
                    
         except ValueError as e:
             print(f'Error: {e}')
@@ -153,6 +157,7 @@ def main():
         
         finally:
             repeater = input('Enter any key to play again, or type "quit"\n')
+    playsound(git_url + 'ByeBye.mp3')
             
         
 
