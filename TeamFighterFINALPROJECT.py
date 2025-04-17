@@ -1,10 +1,12 @@
 # This project will be built on the idea of a player constructing a team of fighters that go against a computer team
 # The teams will work on a 5v5 style with the player entering names with characterists randomly generated
 # The game will pit fighters against eachother where the winner will re-enter the party and wait until the next match
-# The fighers will have 3 main stats that will calculate against the other fighter in the round
+# The fighers will have 4 main stats that will calculate against the other fighter in the round
 # Strength will determine the damage of the fighter ranging from 3-7
 # Health will be the health of the fighter that will move with them between rounds ranging from 20-40
 # Speed will determine which of the fighters attacks first ranging from 1-5
+# Luck will determine how likely a critical hit will occure ranging from 1-10
+# Criticals range on a random number from 1-30 anything past a 25 causes a critical to occure 2x damage
 # The fighter with the higher speed will attack first and will go back and forth until one character dies
 # The Winning character will regain 20 health
 # Once a team has no fighters left, they lose
@@ -13,13 +15,20 @@ import random
 from FighterStats import Fighter_stats
 import time
 
+# TODO Fighting sounds function
+def regular_hit():
+    pass
+
+# TODO Critical Sounds function
+def critical_hit():
+    pass
 
 # Function that creates the team for the player
 def Player_names():
     player_names = list()
     for i in range(5):
-        i = input('Please enter the name of your character')
-        player_names += i
+        name = input('Please enter the name of your character: ')
+        player_names.append(name)
     forward = input('All Fighters have been named. Press Enter to Continue!')
     return player_names
 
@@ -46,21 +55,39 @@ def Computer_names():
     return computer_names
     
 
-# TODO Function that has fighters face off against eachother, returns the victories fighter to the team's roster
+# Function that has fighters face off against eachother, returns the victories fighter to the team's roster
 def Battle(player_fighter, computer_fighter):
     turn_order = [player_fighter,computer_fighter]
     turn_order = sorted(turn_order)
     print(f'current battle {player_fighter.name} {computer_fighter.name}')
     while turn_order[0].health > 0:
+        Crit_potential = 0
+        
         print(f'{turn_order[0].name} attacks {turn_order[1].name}!')
-        turn_order[1].health -= turn_order[0].strength
-        print(f'{turn_order[1].name} took {turn_order[0].strength} damange!')
+        Crit_potential = random.randint(turn_order[0].luck, 30)
+        if Crit_potential <= 25:
+            turn_order[1].health -= turn_order[0].strength
+            print(f'{turn_order[1].name} took {turn_order[0].strength} damange!')
+        
+        elif Crit_potential > 25:
+            turn_order[1].health -= (turn_order[0].strength * 2)
+            print(f'{turn_order[0].name} LANDED A CRITICAL HIT!!')
+            print(f'{turn_order[1].name} took {turn_order[0].strength * 2} damage!!!')
+        
         if turn_order[1].health <= 0:
             break
-        if turn_order[1].health > 0:
+        
+        elif turn_order[1].health > 0:
+            Crit_potential = 0
+            Crit_potential = random.randint(turn_order[0].luck, 30)
             print(f'{turn_order[1].name} attacks {turn_order[0].name}!')
-            turn_order[0].health -= turn_order[1].strength
-            print(f'{turn_order[0].name} took {turn_order[1].strength} damage!')
+            if Crit_potential <= 25:    
+                turn_order[0].health -= turn_order[1].strength
+                print(f'{turn_order[0].name} took {turn_order[1].strength} damage!')
+            elif Crit_potential > 25:
+                turn_order[0].health -= (turn_order[1].strength * 2)
+                print(f'{turn_order[1].name} LANDED A CRITICAL HIT!!')
+                print(f'{turn_order[0].name} took {turn_order[1].strength * 2} damage!!')
             if turn_order[0].health <= 0:
                 break
     if turn_order[0].health > 0:
@@ -90,12 +117,13 @@ def main():
         strength = random.randint(3, 7)
         health = random.randint(20, 40)
         speed = random.randint(1, 5)
-        player_team_obj.append(Fighter_stats(name, strength, health, speed))
+        luck = random.randint(1, 10)
+        player_team_obj.append(Fighter_stats(name, strength, health, speed, luck))
         print(player_team_obj[i])
         i += 1
         time.sleep(0)
         
-    # TODO Generate the computer's team with their names and generate their stats
+    #  Generate the computer's team with their names and generate their stats
     computer_team_data = Computer_names()
     computer_team_obj = []
     for i in range(len(computer_team_data)):
@@ -103,15 +131,16 @@ def main():
         strength = random.randint(3, 7)
         health = random.randint(20, 40)
         speed = random.randint(1, 5)
-        computer_team_obj.append(Fighter_stats(name, strength, health, speed))
+        luck = random.randint(1, 10)
+        computer_team_obj.append(Fighter_stats(name, strength, health, speed, luck))
         print(computer_team_obj[i])
         i += 1
         time.sleep(0)
     
-    # TODO Have fighters from the 2 teams face off 1v1, edit their health stats and winner moves on
+    # Have fighters from the 2 teams face off 1v1, edit their health stats and winner moves on
     player_char_count = len(player_team_obj)
     cpu_char_count = len(computer_team_obj)
-    while player_char_count > 0 or cpu_char_count > 0:
+    while player_char_count > 0 and cpu_char_count > 0:
         elimination_list = list()
         lower_count = player_char_count if player_char_count < cpu_char_count else cpu_char_count
         for i in range(lower_count):
@@ -122,16 +151,19 @@ def main():
                 elimination_list.append(computer_team_obj[i])
         elimination_range = len(elimination_list)
         for i in range(elimination_range):
-            if elimination_list[i].name in player_team_obj:
+            if elimination_list[i] in player_team_obj:
                 player_team_obj.remove(elimination_list[i])
-            elif elimination_list[i].name in computer_team_obj:
+            elif elimination_list[i] in computer_team_obj:
                 computer_team_obj.remove(elimination_list[i])
         elimination_list.clear()
         player_char_count = len(player_team_obj)
         cpu_char_count = len(computer_team_obj)
     print('Fighting loop finished')
+    print(player_team_obj)
+    print(computer_team_obj)
+
     # TODO Announce winner of the fights
-    # 
+
     pass
 
 

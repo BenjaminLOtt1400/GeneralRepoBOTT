@@ -5,7 +5,7 @@ Class used to generate the stats for the fighting characters
 class Fighter_stats:
     
     
-    def __init__(self, name, strength, health, speed):
+    def __init__(self, name, strength, health, speed, luck):
         """Initializes all attributes for the Fighter_stats class
 
         Args:
@@ -18,6 +18,7 @@ class Fighter_stats:
         self.strength = strength
         self.health = health
         self.speed = speed
+        self.luck = luck
         
     # Sets all the getters for class Fighter_stats 
     def name(self):
@@ -28,6 +29,8 @@ class Fighter_stats:
         return self.health
     def speed(self):
         return self.speed
+    def luck(self):
+        return self.luck
     
     # Greater than, Less than, Equal to operators for Fighter_stats
     # Compared the speed attribute of the object
@@ -42,7 +45,8 @@ class Fighter_stats:
         
     def __eq__(self, other):
         if isinstance(other, Fighter_stats):
-            return self.speed == other.speed
+            return (self.speed == other.speed and
+                    self.name == other.name)
         
     def __str__(self):
         """String that is returned when the Fighter Stats object is printed
@@ -57,6 +61,7 @@ class Fighter_stats:
         Strength: {self.strength}
         Health: {self.health}
         Speed: {self.speed}
+        Luck: {self.luck}
 """
 
 def main_fighter():
