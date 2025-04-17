@@ -10,17 +10,29 @@
 # The fighter with the higher speed will attack first and will go back and forth until one character dies
 # The Winning character will regain 20 health
 # Once a team has no fighters left, they lose
-
+import os
+import pip
 import random
-from FighterStats import Fighter_stats
 import time
+from FighterStats import Fighter_stats
+
+try:
+    from playsound import playsound
+except ModuleNotFoundError:
+    print('Missing necessary import module, playsound')
+    print('Program will force exit, please run again with installed module')
+    print('Playsound will be installed in 5 seconds')
+    time.sleep(5)
+    pip.main(['install', 'playsound==1.2.2'])
+    os._exit(0)
+
 
 # TODO Fighting sounds function
-def regular_hit():
+def regular_hit_sound():
     pass
 
 # TODO Critical Sounds function
-def critical_hit():
+def critical_hit_sound():
     pass
 
 # Function that creates the team for the player
@@ -59,7 +71,9 @@ def Computer_names():
 def Battle(player_fighter, computer_fighter):
     turn_order = [player_fighter,computer_fighter]
     turn_order = sorted(turn_order)
-    print(f'current battle {player_fighter.name} {computer_fighter.name}')
+    
+    print(f'Current battle {player_fighter.name} VS {computer_fighter.name}')
+    
     while turn_order[0].health > 0:
         Crit_potential = 0
         
@@ -68,11 +82,13 @@ def Battle(player_fighter, computer_fighter):
         if Crit_potential <= 25:
             turn_order[1].health -= turn_order[0].strength
             print(f'{turn_order[1].name} took {turn_order[0].strength} damange!')
+            time.sleep(0.5)
         
         elif Crit_potential > 25:
             turn_order[1].health -= (turn_order[0].strength * 2)
             print(f'{turn_order[0].name} LANDED A CRITICAL HIT!!')
             print(f'{turn_order[1].name} took {turn_order[0].strength * 2} damage!!!')
+            time.sleep(0.5)
         
         if turn_order[1].health <= 0:
             break
@@ -84,10 +100,12 @@ def Battle(player_fighter, computer_fighter):
             if Crit_potential <= 25:    
                 turn_order[0].health -= turn_order[1].strength
                 print(f'{turn_order[0].name} took {turn_order[1].strength} damage!')
+                time.sleep(0.5)
             elif Crit_potential > 25:
                 turn_order[0].health -= (turn_order[1].strength * 2)
                 print(f'{turn_order[1].name} LANDED A CRITICAL HIT!!')
                 print(f'{turn_order[0].name} took {turn_order[1].strength * 2} damage!!')
+                time.sleep(0.5)
             if turn_order[0].health <= 0:
                 break
     if turn_order[0].health > 0:
@@ -112,6 +130,7 @@ def main():
     # Have the player name their 5 fighters and generate thier stats
     player_team_data = Player_names()
     player_team_obj = []
+    
     for i in range(len(player_team_data)):
         name = player_team_data[i]
         strength = random.randint(3, 7)
@@ -121,11 +140,12 @@ def main():
         player_team_obj.append(Fighter_stats(name, strength, health, speed, luck))
         print(player_team_obj[i])
         i += 1
-        time.sleep(0)
+        time.sleep(1)
         
     #  Generate the computer's team with their names and generate their stats
     computer_team_data = Computer_names()
     computer_team_obj = []
+    
     for i in range(len(computer_team_data)):
         name = computer_team_data[i]
         strength = random.randint(3, 7)
@@ -135,11 +155,13 @@ def main():
         computer_team_obj.append(Fighter_stats(name, strength, health, speed, luck))
         print(computer_team_obj[i])
         i += 1
-        time.sleep(0)
+        time.sleep(1)
     
     # Have fighters from the 2 teams face off 1v1, edit their health stats and winner moves on
+    
     player_char_count = len(player_team_obj)
     cpu_char_count = len(computer_team_obj)
+    
     while player_char_count > 0 and cpu_char_count > 0:
         elimination_list = list()
         lower_count = player_char_count if player_char_count < cpu_char_count else cpu_char_count

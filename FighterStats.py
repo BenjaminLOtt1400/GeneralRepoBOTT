@@ -13,6 +13,7 @@ class Fighter_stats:
             strength (int): Integer used to calculate damage the fighter does
             health (int): Integer used to define the fighter's health
             speed (int): Integer used to determine which fighter attacks first
+            luck (int): Integer used to define the luck of the fighter for use in critical hits
         """
         self.name = name
         self.strength = strength
@@ -55,6 +56,7 @@ class Fighter_stats:
         Fighter's Strength
         Fighter's Health
         Fighter's Speed
+        Fighter's Luck
         """
     
         return f"""Displaying stats for {self.name}
