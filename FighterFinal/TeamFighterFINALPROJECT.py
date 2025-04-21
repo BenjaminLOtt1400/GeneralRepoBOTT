@@ -72,7 +72,7 @@ def Player_names():
 def Computer_names():
     computer_names = list()
     total_names = list()
-    file = open(git_url + 'NamesFile.txt', 'r')
+    file = open('NamesFile.txt', 'r')
     
     for x in file:
         total_names.append(x)
