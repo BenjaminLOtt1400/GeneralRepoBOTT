@@ -26,15 +26,37 @@ except ModuleNotFoundError:
     pip.main(['install', 'playsound==1.2.2'])
     os._exit(0)
 
-git_url = 'https://raw.githubusercontent.com/BenjaminLOtt1400/GeneralRepoBOTT/refs/heads/main/RockPaperScissorsGame/'
+git_url = 'https://raw.githubusercontent.com/BenjaminLOtt1400/GeneralRepoBOTT/refs/heads/main/FighterFinal/'
 
 # TODO Fighting sounds function
 def regular_hit_sound():
-    pass
+    sound_select = random.randint(1,5)
+    
+    if sound_select == 1:
+        playsound(git_url + 'SoundEffects/Punch1.mp3')
+    elif sound_select == 2:
+        playsound(git_url + 'SoundEffects/Punch2.mp3')
+    elif sound_select == 3:
+        playsound(git_url + 'SoundEffects/Punch3.mp3')
+    elif sound_select == 4:
+        playsound(git_url + 'SoundEffects/Punch4.mp3')
+    elif sound_select == 5:
+        playsound(git_url + 'SoundEffects/Punch2.mp3')
 
 # TODO Critical Sounds function
 def critical_hit_sound():
-    pass
+    sound_select = random.randint(1,5)
+    
+    if sound_select == 1:
+        playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
+    elif sound_select == 2:
+        playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
+    elif sound_select == 3:
+        playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
+    elif sound_select == 4:
+        playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
+    elif sound_select == 5:
+        playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
 
 # Function that creates the team for the player
 def Player_names():
@@ -50,7 +72,7 @@ def Player_names():
 def Computer_names():
     computer_names = list()
     total_names = list()
-    file = open('NamesFile.txt', 'r')
+    file = open(git_url + 'NamesFile.txt', 'r')
     
     for x in file:
         total_names.append(x)
@@ -82,11 +104,13 @@ def Battle(player_fighter, computer_fighter):
         Crit_potential = random.randint(turn_order[0].luck, 30)
         if Crit_potential <= 25:
             turn_order[1].health -= turn_order[0].strength
+            regular_hit_sound()
             print(f'{turn_order[1].name} took {turn_order[0].strength} damange!')
             time.sleep(0.5)
         
         elif Crit_potential > 25:
             turn_order[1].health -= (turn_order[0].strength * 2)
+            critical_hit_sound()
             print(f'{turn_order[0].name} LANDED A CRITICAL HIT!!')
             print(f'{turn_order[1].name} took {turn_order[0].strength * 2} damage!!!')
             time.sleep(0.5)
@@ -100,15 +124,18 @@ def Battle(player_fighter, computer_fighter):
             print(f'{turn_order[1].name} attacks {turn_order[0].name}!')
             if Crit_potential <= 25:    
                 turn_order[0].health -= turn_order[1].strength
+                regular_hit_sound()
                 print(f'{turn_order[0].name} took {turn_order[1].strength} damage!')
                 time.sleep(0.5)
             elif Crit_potential > 25:
                 turn_order[0].health -= (turn_order[1].strength * 2)
+                critical_hit_sound()
                 print(f'{turn_order[1].name} LANDED A CRITICAL HIT!!')
                 print(f'{turn_order[0].name} took {turn_order[1].strength * 2} damage!!')
                 time.sleep(0.5)
             if turn_order[0].health <= 0:
                 break
+            
     if turn_order[0].health > 0:
         turn_order[0].health += 20
         print(f'{turn_order[0].name} is victorious, regain 20 health!')
