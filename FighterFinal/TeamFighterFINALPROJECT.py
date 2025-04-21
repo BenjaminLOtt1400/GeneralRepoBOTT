@@ -26,6 +26,7 @@ except ModuleNotFoundError:
     pip.main(['install', 'playsound==1.2.2'])
     os._exit(0)
 
+git_url = 'https://raw.githubusercontent.com/BenjaminLOtt1400/GeneralRepoBOTT/refs/heads/main/RockPaperScissorsGame/'
 
 # TODO Fighting sounds function
 def regular_hit_sound():
