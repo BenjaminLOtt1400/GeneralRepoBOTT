@@ -51,13 +51,13 @@ def critical_hit_sound():
     if sound_select == 1:
         playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
     elif sound_select == 2:
-        playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
+        playsound(git_url + 'SoundEffects/CriticalPunch2.mp3')
     elif sound_select == 3:
-        playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
+        playsound(git_url + 'SoundEffects/CriticalPunch3.mp3')
     elif sound_select == 4:
-        playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
+        playsound(git_url + 'SoundEffects/CriticalPunch4.mp3')
     elif sound_select == 5:
-        playsound(git_url + 'SoundEffects/CriticalPunch1.mp3')
+        playsound(git_url + 'SoundEffects/CriticalPunch5.mp3')
 
 # Function that creates the team for the player
 def Player_names():
@@ -76,7 +76,6 @@ def Computer_names():
     names = list()
     url_read = urllib.request.urlopen(git_url + 'NamesFile.txt')
     file = url_read.read().decode('utf-8')
-    print(type(file))
     file = file.replace('\n', ',')
     names = file.split(',')
 
@@ -213,15 +212,24 @@ def main():
         elimination_list.clear()
         player_char_count = len(player_team_obj)
         cpu_char_count = len(computer_team_obj)
-    print('Fighting loop finished')
-    print(player_team_obj)
-    print(computer_team_obj)
 
     # TODO Announce winner of the fights
-
-    pass
-
-
+    if player_char_count <= 0:
+        print("Player's Team Was Defeated!")
+        print('Computer Team Victorious!!!!!!')
+        print('The following characters survived the battles.')
+        time.sleep(0.5)
+        for x in computer_team_obj:
+            print(f'{x.name} survived with {x.health} health points remaining!')
+    elif cpu_char_count <= 0:
+        print("Computer's Team Was Deafeated!")
+        print('Player Team Victorious!!!!!!')
+        print('The following characters survived the battles.')
+        time.sleep(0.5)
+        for x in player_team_obj:
+            print(f'{x.name} survived with {x.health} health points remaining!')
+    print('Thank you for playing my game!')
+    print('To play again simply run the program again!')
 
 if __name__ == '__main__':
     main()
