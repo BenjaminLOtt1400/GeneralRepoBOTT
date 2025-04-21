@@ -15,6 +15,7 @@ import pip
 import random
 import time
 from FighterStats import Fighter_stats
+import urllib.request
 
 try:
     from playsound import playsound
@@ -72,14 +73,18 @@ def Player_names():
 def Computer_names():
     computer_names = list()
     total_names = list()
-    file = open(git_url + 'NamesFile.txt', 'r')
-    
-    for x in file:
+    names = list()
+    url_read = urllib.request.urlopen(git_url + 'NamesFile.txt')
+    file = url_read.read().decode('utf-8')
+    print(type(file))
+    file = file.replace('\n', ',')
+    names = file.split(',')
+
+    for x in names:
         total_names.append(x)
-    file.close
+        
     total_names = list(map(str.strip, total_names))
     names_length = len(total_names)
-    
     for i in range(5):
         i = random.randint(0, names_length)
         computer_names.append(total_names[i-1])
