@@ -31,6 +31,9 @@ git_url = 'https://raw.githubusercontent.com/BenjaminLOtt1400/GeneralRepoBOTT/re
 
 # TODO Fighting sounds function
 def regular_hit_sound():
+    """Function generates a random number ranging from 1-5.
+    Random number determines which hit sound effect will be played.
+    """
     sound_select = random.randint(1,5)
     
     if sound_select == 1:
@@ -42,10 +45,13 @@ def regular_hit_sound():
     elif sound_select == 4:
         playsound(git_url + 'SoundEffects/Punch4.mp3')
     elif sound_select == 5:
-        playsound(git_url + 'SoundEffects/Punch2.mp3')
+        playsound(git_url + 'SoundEffects/Punch5.mp3')
 
 # TODO Critical Sounds function
 def critical_hit_sound():
+    """Function generates a random number ranging from 1-5.
+    Random number determines which critical hit sound effect will be played.
+    """
     sound_select = random.randint(1,5)
     
     if sound_select == 1:
@@ -61,6 +67,11 @@ def critical_hit_sound():
 
 # Function that creates the team for the player
 def Player_names():
+    """Runs loop that prompts player to enter names for their 5 fighters
+
+    Returns:
+        player_names: List that contains the names for the player's fighters
+    """
     player_names = list()
     for i in range(5):
         name = input('Please enter the name of your character: ')
@@ -71,6 +82,18 @@ def Player_names():
 
 # Function that creates the team for the computer
 def Computer_names():
+    """Generates the names for the fighters in the computer's party.
+    List of names contained on an external file that is read when pulled.
+    Names are split into individual names from single string inside a list.
+    List length is determined to allow new names to be added at any point.
+    Random numbers are generated within the range of names within the list.
+    Name is placed inside of list of the computer's party.
+    Name is removed from the possible selection pool.
+    Continues until 5 names are in the computer's party.
+
+    Returns:
+        computer_names: List that contains names for the computer's fighters
+    """
     computer_names = list()
     total_names = list()
     names = list()
@@ -96,6 +119,23 @@ def Computer_names():
 
 # Function that has fighters face off against eachother, returns the victories fighter to the team's roster
 def Battle(player_fighter, computer_fighter):
+    """Function that performs the primary purpose of the program.
+    Player fighter and Computer fighter is placed against eachother to fight.
+    Fighters are sorted in list turn_order based on their speed stat.
+    Fighters then go back and forth subtracting their health by the other's strength.
+    Luck stat is taken into a random number generator to determine if a critical hit is landed.
+    Sound effects are played for both regular hits and critical hits.
+    Loop continues until one of the fighters are defeated.
+    Fighters are then returned back and the defeated fighter is deleted.
+
+    Args:
+        player_fighter (player_fighter): Class object that is the current player fighter
+        computer_fighter (computer_fighter): Class object that is the current computer fighter
+
+    Returns:
+        turn_order[x]: List that holds the current fighters sorted by their speed stat.
+        Used to update the fighters outside of the function.
+    """
     turn_order = [player_fighter,computer_fighter]
     turn_order = sorted(turn_order)
     
@@ -157,7 +197,17 @@ def Battle(player_fighter, computer_fighter):
 
 
 def main():
-    # TODO introduce that player to the game and explain the rules
+    """Main function that plays through the game.
+    Comments separate out the different progressions of the game.
+    """
+    # introduce that player to the game and explain the rules
+    print(f'Welcome to my CS1400 final project!')
+    print(f'This game is a text based team fighter game.')
+    print(f'You will name 5 fighters for your party and stats will be generated for them.')
+    print(f'Your fighters will be randomly assigned Strength, Health, Speed, and Luck.')
+    print(f'Your enemy is the computer who will also generate 5 fighters.')
+    print(f"I don't wanna take too much time explaining everything so good luck and have fun.")
+    forward = input('Press Enter to begin playing!')
     
     # Have the player name their 5 fighters and generate thier stats
     player_team_data = Player_names()
@@ -213,7 +263,7 @@ def main():
         player_char_count = len(player_team_obj)
         cpu_char_count = len(computer_team_obj)
 
-    # TODO Announce winner of the fights
+    # Announce winner of the fights
     if player_char_count <= 0:
         print("Player's Team Was Defeated!")
         print('Computer Team Victorious!!!!!!')
